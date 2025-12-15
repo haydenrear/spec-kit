@@ -1,6 +1,7 @@
 # Implementation Plan: [FEATURE]
 
 **Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
+
 **Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
 
 **Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
@@ -45,7 +46,8 @@ specs/[###-feature]/
 ├── quickstart.md        # Phase 1 output (/speckit.plan command)
 ├── contracts/           # Phase 1 output (/speckit.plan command)
 └── tasks.md             # Phase 2 output (/speckit.tasks command - NOT created by /speckit.plan)
-test_graph/src/test/resources/features/[###-feature]
+
+test_graph/src/test/resources/features/{name} # the feature files for all of the scenarios and user stories. See the test_graph/instructions.md and test_graph/instructions-features.md files for instructions on how to write the Gherkin feature files and how we integrate with Gherkin.
 ```
 
 ### Source Code (repository root)
@@ -57,7 +59,7 @@ test_graph/src/test/resources/features/[###-feature]
 -->
 
 ```text
-# Typical setup 
+# Typical setup - you will be initialized in the [app_name_parent] - it will be the root - and the below parent project will be created.
 
 [app_name_parent]/
 ├── .git/                                      # parent repo
@@ -178,8 +180,7 @@ test_graph/src/test/resources/features/[###-feature]
 │           └── __main__.py                 # script for deploying creating kubernetes cluster in k3d and deploying helm with options
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: [Document the selected structure and reference the real directories captured above]
 
 ## Complexity Tracking
 

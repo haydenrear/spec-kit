@@ -10,7 +10,19 @@
 <!--
   IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
   Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
-  you should still have a viable MVP (Minimum Viable Product) that delivers value.
+  you should still have a viable MVP (Minimum Viable Product) that delivers value. Additionally,
+  each story/journey will have additions to the test_graph for integration testing, using Cucumber.
+  After creating the user stories, translate them into feature files under the folder test_graph/src/test/resources/features/{name}.
+  The translation to Gherkin feature files should adhere to the instructions test_graph/instructions.md and also 
+  information about the test_graph framework can be found under test_graph/instructions-features.md. When completing
+  the integration test feature files in the test_graph, check to see if feature files already exist, and if so use the existing
+  step definitions if at all possible. When writing the feature files, make sure to create as steps as possible, and make
+  the setup as generic as possible. It is as simple as provide information to be added to the context, then assert that
+  messages were received as expected. There should not be a lot of different step definitions. Additionally, Spring
+  is used so we can decouple initialization logic. This means by adding a bean of a type as a component accepting a
+  context and depending on other beans in that computation graph, we can then add an assertion over that context without 
+  changing any of the other code. This is what it means to run the tests together but have them independent. They are
+  sufficiently decoupled to be useful over time and minimize regressions.
   
   Assign priorities (P1, P2, P3, etc.) to each story, where P1 is the most critical.
   Think of each story as a standalone slice of functionality that can be:
@@ -18,6 +30,7 @@
   - Tested independently
   - Deployed independently
   - Demonstrated to users independently
+  - Integration tested together using test_graph, but independently testable
 -->
 
 ### User Story 1 - [Brief Title] (Priority: P1)
@@ -113,4 +126,6 @@
 - **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
 - **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
 - **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+
+### Gherkin Feature Files For Test Graph
 
