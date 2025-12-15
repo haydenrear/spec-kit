@@ -45,6 +45,7 @@ specs/[###-feature]/
 ├── quickstart.md        # Phase 1 output (/speckit.plan command)
 ├── contracts/           # Phase 1 output (/speckit.plan command)
 └── tasks.md             # Phase 2 output (/speckit.tasks command - NOT created by /speckit.plan)
+test_graph/src/test/resources/features/[###-feature]
 ```
 
 ### Source Code (repository root)
@@ -56,39 +57,125 @@ specs/[###-feature]/
 -->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
-├── models/
-├── services/
-├── cli/
-└── lib/
+# Typical setup 
 
-tests/
-├── contract/
-├── integration/
-└── unit/
+[app_name_parent]/
+├── .git/                                      # parent repo
+├── settings.gradle.kts
+├── build.gradle.kts
+├── gradle.properties
+├── gradlew
+├── gradlew.bat
+├── gradle/
 
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
+├── buildSrc/                                  # GIT SUBMODULE
+│   ├── .git/
+│   ├── build.gradle.kts
+│   └── src/main/kotlin/...
 
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
+├── [app_name]/                                # GIT SUBMODULE: Spring Boot app
+│   ├── .git/
+│   ├── build.gradle.kts
+│   └── src/
+│       ├── main/
+│       │   ├── java/
+│       │   │   └── com/hayden/[app_name]/
+│       │   │       ├── api/
+│       │   │       ├── models/
+│       │   │       ├── services/
+│       │   │       └── App.java
+│       │   ├── resources/
+│       │   │   ├── application.yml
+│       │   │   └── static/
+│       │   │       ├── README.md              # indicates optional frontend build output
+│       │   │       └── (frontend build output here, e.g. dist/, assets/, index.html)
+│       │   └── docker/
+│       │       └── Dockerfile
+│       └── test/
+│           ├── java/com/hayden/[app_name]/...
+│           └── resources/...
 
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
+├── [app_name_lib]/                            # GIT SUBMODULE: shared Java lib (one of many)
+│   ├── .git/
+│   ├── build.gradle.kts
+│   └── src/
+│       ├── main/java/com/hayden/[app_name_lib]/...
+│       └── test/java/com/hayden/[app_name_lib]/...
 
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+├── [java_lib_module_2]/                       # GIT SUBMODULE: Java lib (sibling module)
+│   ├── .git/
+│   ├── build.gradle.kts
+│   └── src/main/java/com/hayden/[java_lib_module_2]/...
+
+├── [java_lib_module_3]/                       # GIT SUBMODULE: Java lib (sibling module)
+│   ├── .git/
+│   ├── build.gradle.kts
+│   └── src/main/java/com/hayden/[java_lib_module_3]/...
+
+├── ...                                        # (0..N) additional Java lib submodules
+
+├── runner_code/                               # GIT SUBMODULE: builds/pushes base Docker images
+│   ├── .git/
+│   ├── build.gradle.kts                       # NOTE: Code for building/pushing base docker images, adding this to the computation graph - other modules depend on specific tasks.
+│   └── src/
+│       └── main/docker/...                    # base docker images and registry 
+
+├── test_graph/                                # GIT SUBMODULE: feature/integration tests, test graph framework
+│   ├── .git/
+│   ├── build.gradle.kts
+│   ├── instructions.md                        # NOTE: Instructions on how to add to test graph framework
+│   ├── instructions-features.md               # NOTE: Instructions on best practices for writing feature files for test graph framework
+│   └── src/
+│       ├── main/java/com/hayden/test_graph/...
+│       └── test/
+│           ├── java/com/hayden/test_graph/...
+│           └── resources/features/[feature]/...
+
+├── [python app parent]/                                    # GIT SUBMODULE: Python parent (Gradle-managed too)
+│   ├── .git/
+│   ├── build.gradle.kts                       # NOTE: present so Gradle can orchestrate
+│   ├── pyproject.toml                         # NOTE: build uv multi-module workspace 
+│   │                                          # container builds / tasks across python packages
+│   └── packages/
+│       ├── shared_python_lib_a/               # GIT SUBMODULE: shared python lib (one of many) - example python_util - python shared utils
+│       │   ├── .git/
+│       │   ├── pyproject.toml
+│       │   ├── .env
+│       │   ├── resources/application.yml
+│       │   ├── src/shared_python_lib_a/...
+│       │   └── tests/...
+│       │
+│       ├── shared_python_lib_b/               # GIT SUBMODULE: shared python lib (one of many) - example python_di - config and DI framework
+│       │   ├── .git/
+│       │   ├── pyproject.toml
+│       │   ├── .env
+│       │   ├── resources/application.yml
+│       │   ├── src/shared_python_lib_b/...
+│       │   └── tests/...
+│       │
+│       ├── [python_app_name]/                 # GIT SUBMODULE: python app package
+│       │   ├── .git/
+│       │   ├── build.gradle.kts               # NOTE: present so Gradle can build Docker images
+│       │   ├── pyproject.toml
+│       │   ├── .env
+│       │   ├── resources/application.yml
+│       │   ├── resources/application-docker.yml
+│       │   ├── src/[python_app_name]/...
+│       │   ├── tests/...
+│       │   └── docker/               # Docker build context for python app
+│       │       └── Dockerfile
+│       │
+│       └── ...                                # (0..N) additional python lib/app submodules
+
+├── deploy-helm/                               # GIT SUBMODULE: Helm chart + Python CLI
+│   ├── .git/
+│   ├── Chart.yaml
+│   ├── values.yaml
+│   ├── templates/
+│   ├── pyproject.toml
+│   └── src/
+│       └── helm_deploy/
+│           └── __main__.py                 # script for deploying creating kubernetes cluster in k3d and deploying helm with options
 ```
 
 **Structure Decision**: [Document the selected structure and reference the real

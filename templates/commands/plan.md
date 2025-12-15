@@ -79,17 +79,25 @@ You **MUST** consider the user input before proceeding (if not empty).
    - For each user action → endpoint
    - Use standard REST/GraphQL patterns
    - Output OpenAPI/GraphQL schema to `/contracts/`
+ 
+3. **Generate Gherkin Feature Files** from functional requirements:
+    - For each user action → endpoint
+    - Create feature files in /test_graph/src/test/resources/features with new directory for app - see test_graph/instructions-features.md for more instructions on how to write feature files, and test_graph/instructions.md for more information about the test_graph framework.
+    - Take care to minimize the number of step definitions, using DataTable or generic step definitions to not multiply maintenance burden 
+    - See /test_graph/feature-instructions.md for more information and examples on how to do this.
 
-3. **Agent context update**:
+4. **Agent context update**:
    - Run `{AGENT_SCRIPT}`
    - These scripts detect which AI agent is in use
    - Update the appropriate agent-specific context file
    - Add only new technology from current plan
    - Preserve manual additions between markers
 
-**Output**: data-model.md, /contracts/*, quickstart.md, agent-specific file
+
+**Output**: data-model.md, /contracts/*, quickstart.md, test_graph/src/test/resources/features/{name}, agent-specific file
 
 ## Key rules
 
 - Use absolute paths
 - ERROR on gate failures or unresolved clarifications
+- When generating feature files in the test_graph, make sure to limit the number of step definitions to a limited number, using the templating feature. The pattern is load context with data in one step definition, set up listener in another, then execute message received in a third. These three should be generic step definitions. For more information on best practices and tips for writing feature files, see test_graph/instructions-features.md. For more information about the test_graph framework, see test_graph/instructions.md
