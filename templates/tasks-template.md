@@ -213,7 +213,7 @@ Task: "Create [Entity2] model in src/models/[entity2].py"
 1. Complete Phase 1: Setup
 2. Complete Phase 2: Foundational (CRITICAL - blocks all stories)
 3. Complete Phase 3: User Story 1
-4. **STOP and VALIDATE**: Test User Story 1 independently
+4. **STOP and VALIDATE**: Test User Story 1 independently with unit tests, then write/run the integration test in test_graph
 5. Deploy/demo if ready
 
 ### Incremental Delivery
@@ -223,6 +223,7 @@ Task: "Create [Entity2] model in src/models/[entity2].py"
 3. Add User Story 2 → Test independently → Deploy/Demo
 4. Add User Story 3 → Test independently → Deploy/Demo
 5. Each story adds value without breaking previous stories
+6. Upon merging to test_graph all changes, test integration between
 
 ### Parallel Team Strategy
 
@@ -233,7 +234,7 @@ With multiple developers:
    - Developer A: User Story 1
    - Developer B: User Story 2
    - Developer C: User Story 3
-3. Stories complete and integrate independently
+3. Stories complete and integrate independently, merge together the code, then run unit tests and fix, then merge test_graph, run it and fix. 
 
 ---
 
@@ -245,4 +246,5 @@ With multiple developers:
 - Verify tests fail before implementing
 - Commit after each task or logical group
 - Stop at any checkpoint to validate story independently
+- Once finish unit testing, then add test_graph integration test, validating integration
 - Avoid: vague tasks, same file conflicts, cross-story dependencies that break independence

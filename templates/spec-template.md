@@ -23,6 +23,11 @@
   context and depending on other beans in that computation graph, we can then add an assertion over that context without 
   changing any of the other code. This is what it means to run the tests together but have them independent. They are
   sufficiently decoupled to be useful over time and minimize regressions.
+
+  As you can see, the Acceptance Scenarios are written in the Gherkin style. Therefore, when you are writing these 
+  user stories, you can use these as the starting point for writing the cucumber/gherkin feature files. Make sure to 
+  use the cucumber test tag, then, as the feature file will be generic so we can minimize the number of step definitions,
+  so we can reference them for implementation and after. 
   
   Assign priorities (P1, P2, P3, etc.) to each story, where P1 is the most critical.
   Think of each story as a standalone slice of functionality that can be:
@@ -41,6 +46,8 @@
 
 **Independent Test**: [Describe how this can be tested independently - e.g., "Can be fully tested by [specific action] and delivers [specific value]"]
 
+**Cucumber Test Tag**: [Add the associated test tag for how to find it in the feature files, once added and created from the Acceptance Scenarios]
+
 **Acceptance Scenarios**:
 
 1. **Given** [initial state], **When** [action], **Then** [expected outcome]
@@ -56,6 +63,8 @@
 
 **Independent Test**: [Describe how this can be tested independently]
 
+**Cucumber Test Tag**: [Add the associated test tag for how to find it in the feature files, once added and created from the Acceptance Scenarios]
+
 **Acceptance Scenarios**:
 
 1. **Given** [initial state], **When** [action], **Then** [expected outcome]
@@ -69,6 +78,8 @@
 **Why this priority**: [Explain the value and why it has this priority level]
 
 **Independent Test**: [Describe how this can be tested independently]
+
+**Cucumber Test Tag**: [Add the associated test tag for how to find it in the feature files, once added and created from the Acceptance Scenarios]
 
 **Acceptance Scenarios**:
 
@@ -127,5 +138,20 @@
 - **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
 - **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
 
-### Gherkin Feature Files For Test Graph
+## Notes on Gherkin Feature Files For Test Graph
 
+The functional requirements, success criteria, edge cases, and measurable outcomes will then be encoded in feature files
+using Gherkin and Cucumber in test_graph/src/test/resources/features/{name}.
+
+The translation to Gherkin feature files should adhere to the instructions test_graph/instructions.md and also
+information about the test_graph framework can be found under test_graph/instructions-features.md. When completing
+the integration test feature files in the test_graph, check to see if feature files already exist, and if so use the existing
+step definitions if at all possible. 
+
+When writing the feature files and step definitions for those files, make sure to create as steps as possible, and make
+the setup as generic as possible. It is as simple as provide information to be added to the context, then assert that
+messages were received as expected. There should not be a lot of different step definitions. Additionally, Spring
+is used so we can decouple initialization logic. This means by adding a bean of a type as a component accepting a
+context and depending on other beans in that computation graph, we can then add an assertion over that context without
+changing any of the other code. This is what it means to run the tests together but have them independent. They are
+sufficiently decoupled to be useful over time and minimize regressions.

@@ -635,7 +635,7 @@ def merge_json_files(existing_path: Path, new_content: dict, verbose: bool = Fal
     return merged
 
 def download_template_from_github(ai_assistant: str, download_dir: Path, *, script_type: str = "sh", verbose: bool = True, show_progress: bool = True, client: httpx.Client = None, debug: bool = False, github_token: str = None) -> Tuple[Path, dict]:
-    repo_owner = "github"
+    repo_owner = "haydenrear"
     repo_name = "spec-kit"
     if client is None:
         client = httpx.Client(verify=ssl_context)
@@ -649,7 +649,7 @@ def download_template_from_github(ai_assistant: str, download_dir: Path, *, scri
             api_url,
             timeout=30,
             follow_redirects=True,
-            headers=_github_auth_headers(github_token),
+            # headers=_github_auth_headers(github_token),
         )
         status = response.status_code
         if status != 200:
@@ -701,7 +701,7 @@ def download_template_from_github(ai_assistant: str, download_dir: Path, *, scri
             download_url,
             timeout=60,
             follow_redirects=True,
-            headers=_github_auth_headers(github_token),
+            # headers=_github_auth_headers(github_token),
         ) as response:
             if response.status_code != 200:
                 # Handle rate-limiting on download as well
@@ -1365,5 +1365,6 @@ def main():
     app()
 
 if __name__ == "__main__":
+    init(project_name="./hello", ai_assistant="claude", no_git=True, here=False, script_type='sh')
     main()
 
