@@ -1365,6 +1365,6 @@ def main():
     app()
 
 if __name__ == "__main__":
-    init(project_name="./hello", ai_assistant="claude", no_git=True, here=False, script_type='sh')
+    init(project_name=None, ai_assistant="claude", no_git=True, here=True, script_type='sh')
     main()
 
