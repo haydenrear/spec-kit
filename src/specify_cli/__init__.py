@@ -772,6 +772,7 @@ def download_and_extract_template(project_path: Path, ai_assistant: str, script_
             tracker.add("download", "Download template")
             tracker.complete("download", meta['filename'])
     except Exception as e:
+        print(f"Failed to download {e}")
         if tracker:
             tracker.error("fetch", str(e))
         else:
@@ -786,7 +787,8 @@ def download_and_extract_template(project_path: Path, ai_assistant: str, script_
         console.print("Extracting template...")
 
     try:
-        if not is_current_dir:
+        print(f"Zip path {zip_path}")
+        if not is_current_dir and not os.path.exists(project_path):
             project_path.mkdir(parents=True)
 
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
@@ -797,7 +799,7 @@ def download_and_extract_template(project_path: Path, ai_assistant: str, script_
             elif verbose:
                 console.print(f"[cyan]ZIP contains {len(zip_contents)} items[/cyan]")
 
-            if is_current_dir:
+            if is_current_dir or os.path.exists(project_path):
                 with tempfile.TemporaryDirectory() as temp_dir:
                     temp_path = Path(temp_dir)
                     zip_ref.extractall(temp_path)
@@ -860,7 +862,7 @@ def download_and_extract_template(project_path: Path, ai_assistant: str, script_
 
                     shutil.move(str(nested_dir), str(temp_move_dir))
 
-                    project_path.rmdir()
+                    # project_path.rmdir()
 
                     shutil.move(str(temp_move_dir), str(project_path))
                     if tracker:
@@ -870,6 +872,7 @@ def download_and_extract_template(project_path: Path, ai_assistant: str, script_
                         console.print(f"[cyan]Flattened nested directory structure[/cyan]")
 
     except Exception as e:
+        print(f"Failed to extract {e}")
         if tracker:
             tracker.error("extract", str(e))
         else:
@@ -878,8 +881,8 @@ def download_and_extract_template(project_path: Path, ai_assistant: str, script_
                 if debug:
                     console.print(Panel(str(e), title="Extraction Error", border_style="red"))
 
-        if not is_current_dir and project_path.exists():
-            shutil.rmtree(project_path)
+        # if not is_current_dir and project_path.exists():
+        #     shutil.rmtree(project_path)
         raise typer.Exit(1)
     else:
         if tracker:
@@ -1021,7 +1024,7 @@ def init(
             )
             console.print()
             console.print(error_panel)
-            raise typer.Exit(1)
+            # raise typer.Exit(1)
 
     current_dir = Path.cwd()
 
@@ -1157,8 +1160,8 @@ def init(
                 _label_width = max(len(k) for k, _ in _env_pairs)
                 env_lines = [f"{k.ljust(_label_width)} → [bright_black]{v}[/bright_black]" for k, v in _env_pairs]
                 console.print(Panel("\n".join(env_lines), title="Debug Environment", border_style="magenta"))
-            if not here and project_path.exists():
-                shutil.rmtree(project_path)
+            # if not here and project_path.exists():
+            #     shutil.rmtree(project_path)
             raise typer.Exit(1)
         finally:
             pass
@@ -1365,6 +1368,5 @@ def main():
     app()
 
 if __name__ == "__main__":
-    init(project_name=None, ai_assistant="claude", no_git=True, here=True, script_type='sh')
     main()
 
