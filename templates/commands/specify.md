@@ -40,6 +40,10 @@ Given that feature description, do this:
      - "Fix payment processing timeout bug" → "fix-payment-timeout"
 
 2. **Check for existing branches before creating new one**:
+ 
+    For each of the git submodules that we will be including in the changes, including the test_graph git submodule,
+    and the application modules, such as Java application and lib modules, Python application and lib modules, and the root directory,
+    which contains all of these submodules, do the following to prepare the repository. 
 
    a. First, fetch all remote branches to ensure we have the latest information:
 
@@ -101,7 +105,9 @@ Given that feature description, do this:
 
 5. Write the specification to SPEC_FILE using the template structure, replacing placeholders with concrete details derived from the feature description (arguments) while preserving section order and headings.
 
-6. **Specification Quality Validation**: After writing the initial spec, validate it against quality criteria:
+6. Write the feature files based on Acceptance Criteria to test_graph - in test_graph/src/test/resources/features/{name} - see test_graph/instructions.md and test_graph/instructions-features.md for how to adopt.
+ 
+7. **Specification Quality Validation**: After writing the initial spec, validate it against quality criteria:
 
    a. **Create Spec Quality Checklist**: Generate a checklist file at `FEATURE_DIR/checklists/requirements.md` using the checklist template structure with these validation items:
 
@@ -193,7 +199,16 @@ Given that feature description, do this:
 
    d. **Update Checklist**: After each validation iteration, update the checklist file with current pass/fail status
 
-7. Report completion with branch name, spec file path, checklist results, and readiness for the next phase (`/speckit.clarify` or `/speckit.plan`).
+8. Gherkin feature file quality validation
+
+Based on the update to the above, we also need to update the Gherkin feature files that were added. Similar to above, making sure 
+to use the cucumber tags in the spec.md, make sure the features are sufficiently defined. For the Gherkin feature files, 
+we are interested in limiting the number of step definitions. We are only interested in defining a starting state, including
+validating any services are started or config properties, and then validating that we received the messages we were supposed to 
+receive. In truth, this should only take a three or four generic step definitions that we then use across all of the feature files.
+Remember, we're testing the integration behavior on this, and typically it's on top of unit tests for integration regression.
+ 
+9. Report completion with branch name, spec file path, checklist results, and readiness for the next phase (`/speckit.clarify` or `/speckit.plan`).
 
 **NOTE:** The script creates and checks out the new branch and initializes the spec file before writing.
 
