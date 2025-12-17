@@ -1,3 +1,3 @@
 import os
 
-# TODO: this should create the template, etc.
+# TODO: this should copy the templates, etc.
